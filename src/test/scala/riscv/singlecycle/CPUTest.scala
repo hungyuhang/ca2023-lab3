@@ -132,12 +132,22 @@ class HelloTest extends AnyFlatSpec with ChiselScalatestTester {
 
 class HW2Test extends AnyFlatSpec with ChiselScalatestTester {
   behavior.of("Single Cycle CPU")
-  it should "runs properly" in {
+  it should "calculate the leftmost-zero-byte of 3 64bit numbers" in {
     test(new TestTopModule("hw2_asm.asmbin")).withAnnotations(TestAnnotations.annos) { c =>
       for (i <- 1 to 50) {
         c.clock.step(1000)
         c.io.mem_debug_read_address.poke((i * 4).U) // Avoid timeout
       }
+
+      c.io.mem_debug_read_address.poke(12.U)
+      c.clock.step()
+      c.io.mem_debug_read_data.expect(5.U) // the leftmost zero byte of 0x1122334455007700
+      c.io.mem_debug_read_address.poke(8.U)
+      c.clock.step()
+      c.io.mem_debug_read_data.expect(8.U) // the leftmost zero byte of 0x0123456789abcdef
+      c.io.mem_debug_read_address.poke(4.U)
+      c.clock.step()
+      c.io.mem_debug_read_data.expect(1.U) // the leftmost zero byte of 0x1100220033445566
     }
   }
 }

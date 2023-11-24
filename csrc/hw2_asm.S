@@ -30,6 +30,7 @@ _start:
     addi sp, sp, -4         # create space for buffer of print function
     la   s4, test1          # s4 points to the first test case
     li   s5, 3              # number of test cases
+    li   s7, 0x4            # base memory address to store the result
 
 loop:
 
@@ -81,6 +82,13 @@ loop:
     li   a2, 1              # number of \n we want to print
     li   a7, SYSWRITE       # "write" syscall
     ecall
+
+    # store the result in memory
+    addi t0, s5, -1         # t0 = counter - 1
+    slli t0, t0, 2
+    add  t0, t0, s7         # t0 is now the address to store the result
+    addi s6, s6, -48        # change from ascii digit back to number
+    sw   s6, 0(t0)          # store the result into address t0
 
     # # print metrics
     # li   a0, 1              # 1 = standard output (stdout)
