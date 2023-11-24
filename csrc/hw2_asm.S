@@ -1,6 +1,6 @@
 # RISC-V assembly program.
 
-.org 0
+# .org 0
 # Provide program starting address to linker
 .global _start
 
@@ -33,14 +33,14 @@ _start:
 
 loop:
 
-    # get the cycle/instret before the task
-    jal get_cycles
-    mv  s0, a0             # s0: start cycle count: lower bytes
-    mv  s1, a1             # s1: start cycle count: higher bytes
+    # # get the cycle/instret before the task
+    # jal get_cycles
+    # mv  s0, a0             # s0: start cycle count: lower bytes
+    # mv  s1, a1             # s1: start cycle count: higher bytes
 
-    jal get_instret
-    mv  s2, a0             # s2: start inst retired: lower bytes
-    mv  s3, a1             # s3: start inst retired: higher bytes
+    # jal get_instret
+    # mv  s2, a0             # s2: start inst retired: lower bytes
+    # mv  s3, a1             # s3: start inst retired: higher bytes
 
     # find the leftmost zero byte
     lw   a0, 0(s4)         # a0:test_half_right
@@ -48,18 +48,18 @@ loop:
     jal  zbytel
     mv   s6, a0            # save the result to s6
 
-    # get the cycle/instret after the task, and substract with the number get before the task
-    jal get_cycles
-    sub s0, a0, s0         # 
-    sltu t0, a0, s0        # t0 is now the borrow bit
-    sub  s1, s1, a1        # 
-    sub  s1, s1, t0
+    # # get the cycle/instret after the task, and substract with the number get before the task
+    # jal get_cycles
+    # sub s0, a0, s0         # 
+    # sltu t0, a0, s0        # t0 is now the borrow bit
+    # sub  s1, s1, a1        # 
+    # sub  s1, s1, t0
 
-    jal get_instret
-    sub s2, a0, s2         # 
-    sltu t0, a0, s2        # t0 is now the borrow bit
-    sub  s3, s3, a1        # 
-    sub  s3, s3, t0
+    # jal get_instret
+    # sub s2, a0, s2         # 
+    # sltu t0, a0, s2        # t0 is now the borrow bit
+    # sub  s3, s3, a1        # 
+    # sub  s3, s3, t0
 
     # print find leftmost zero byte result
     li   a0, 1              # 1 = standard output (stdout)
@@ -82,38 +82,38 @@ loop:
     li   a7, SYSWRITE       # "write" syscall
     ecall
 
-    # print metrics
-    li   a0, 1              # 1 = standard output (stdout)
-    la   a1, str2           # load address of str1
-    la   a2, str2_size      # length of str1
-    li   a7, SYSWRITE       # "write" syscall
-    ecall
+    # # print metrics
+    # li   a0, 1              # 1 = standard output (stdout)
+    # la   a1, str2           # load address of str1
+    # la   a2, str2_size      # length of str1
+    # li   a7, SYSWRITE       # "write" syscall
+    # ecall
 
-    mv   a0, s0
-    mv   a1, s1
-    jal  printhex
+    # mv   a0, s0
+    # mv   a1, s1
+    # jal  printhex
 
-    li   a0, 1              # 1 = standard output (stdout)
-    la   a1, endl           # load address of endl
-    li   a2, 1              # number of \n we want to print
-    li   a7, SYSWRITE       # "write" syscall
-    ecall
+    # li   a0, 1              # 1 = standard output (stdout)
+    # la   a1, endl           # load address of endl
+    # li   a2, 1              # number of \n we want to print
+    # li   a7, SYSWRITE       # "write" syscall
+    # ecall
 
-    li   a0, 1              # 1 = standard output (stdout)
-    la   a1, str3           # load address of str1
-    la   a2, str3_size      # length of str1
-    li   a7, SYSWRITE       # "write" syscall
-    ecall
+    # li   a0, 1              # 1 = standard output (stdout)
+    # la   a1, str3           # load address of str1
+    # la   a2, str3_size      # length of str1
+    # li   a7, SYSWRITE       # "write" syscall
+    # ecall
 
-    mv   a0, s2
-    mv   a1, s3
-    jal  printhex
+    # mv   a0, s2
+    # mv   a1, s3
+    # jal  printhex
 
-    li   a0, 1              # 1 = standard output (stdout)
-    la   a1, endl           # load address of endl
-    li   a2, 2              # number of \n we want to print
-    li   a7, SYSWRITE       # "write" syscall
-    ecall
+    # li   a0, 1              # 1 = standard output (stdout)
+    # la   a1, endl           # load address of endl
+    # li   a2, 2              # number of \n we want to print
+    # li   a7, SYSWRITE       # "write" syscall
+    # ecall
 
     # check if the loop should break
     addi s4, s4, 8           # move to the next test case
